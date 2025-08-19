@@ -1,0 +1,23 @@
+<%- include('partials/header', { title: 'Home - catálogo de pães' }) %>
+
+<h2 class="mb-4">Todos os pães</h2>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  <% paes.forEach(pao => { %>
+    <div class="col">
+      <div class="card h-100 shadow-sm">
+        <% if (pao.fotoUrl) { %>
+          <img src="<%= pao.fotoUrl %>" class="card-img-top" alt="<%= pao.name %>">
+        <% } %>
+        <div class="card-body">
+          <h5 class="card-title"><%= pao.name %></h5>
+          <p class="card-text"><strong>Preço:</strong> R$<%= pao.preco.toFixed(2) %></p>
+          <p class="card-text"><strong>Textura:</strong> <%= pao.textura %></p>
+          <p class="card-text"><strong>Padaria:</strong> <%= pao.padaria.name %></p>
+        </div>
+      </div>
+    </div>
+  <% }) %>
+</div>
+
+<%- include('partials/footer') %>

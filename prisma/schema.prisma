@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  password String
+  role     String  @default("user")
+  createdAt DateTime @default(now())
+}
+
+model Padaria {
+  id       Int     @id @default(autoincrement())
+  name     String
+  endereco String
+  paes     Pao[]
+  createdAt DateTime @default(now())
+}
+
+model Pao {
+  id       Int     @id @default(autoincrement())
+  name     String
+  descricao String?
+  preco    Float
+  textura  String
+  foto     String?
+  padariaId Int
+  padaria   Padaria @relation(fields: [padariaId], references: [id])
+  createdAt DateTime @default(now())
+}
