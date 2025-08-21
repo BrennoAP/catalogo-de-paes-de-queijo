@@ -1,0 +1,88 @@
+<%- include('partials/header', { title: 'Catálogo de Pães' }) %>
+
+<body class="container py-4">
+
+  <div class="text-center mb-4">
+    <h1>Catálogo de Pães</h1>
+    <h2 class="strong mt-2">Bem Vindo!</h2>
+    <span class="lead">Selecione os filtros abaixo ou clique em listar todos</span>
+  </div>
+
+  <!-- Filtros -->
+  <form method="GET" action="/" class="row g-3 mb-4 justify-content-center">
+    <div class="col-md-3">
+      <label for="padariaId" class="form-label">Padaria</label>
+      <select name="padariaId" id="padariaId" class="form-select">
+        <option value="">Todas</option>
+        <% padarias.forEach(p => { %>
+          <option value="<%= p.id %>" <%= filtrosAtivos.padariaId == p.id ? 'selected' : '' %>>
+            <%= p.name %>
+          </option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label for="textura" class="form-label">Textura</label>
+      <select name="textura" id="textura" class="form-select">
+        <option value="">Todas</option>
+        <% texturas.forEach(t => { %>
+          <option value="<%= t %>" <%= filtrosAtivos.textura == t ? 'selected' : '' %>>
+            <%= t %>
+          </option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label for="precoMin" class="form-label">Preço Mínimo</label>
+      <input type="number" step="0.01" name="precoMin" id="precoMin" class="form-control" 
+             value="<%= filtrosAtivos.precoMin || '' %>">
+    </div>
+
+    <div class="col-md-2">
+      <label for="precoMax" class="form-label">Preço Máximo</label>
+      <input type="number" step="0.01" name="precoMax" id="precoMax" class="form-control" 
+             value="<%= filtrosAtivos.precoMax || '' %>">
+    </div>
+
+    <div class="col-md-2 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary w-100">Aplicar Filtros</button>
+    </div>
+  </form>
+
+  <!-- Cards de pães -->
+  <% if (paes.length > 0) { %>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <% paes.forEach(pao => { %>
+        <div class="col">
+          <div class="card h-100">
+            <% if (pao.foto) { %>
+              <img src="/uploads/<%= pao.foto %>" class="card-img-top img-fluid" alt="<%= pao.name %>" style="object-fit: cover; height: 200px;">
+            <% } else { %>
+              <div class="d-flex align-items-center justify-content-center bg-light" style="height: 200px;">
+                <span>Sem imagem</span>
+              </div>
+            <% } %>
+            <div class="card-body">
+              <h5 class="card-title"><%= pao.name %></h5>
+              <p class="card-text"><%= pao.descricao %></p>
+              <p class="card-text"><strong>Textura:</strong> <%= pao.textura %></p>
+              <p class="card-text"><strong>Preço:</strong> R$ <%= pao.preco.toFixed(2) %></p>
+              <p class="card-text"><strong>Padaria:</strong> <%= pao.padaria.name %></p>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else if (Object.keys(filtrosAtivos).length > 0) { %>
+    <p class="text-center mt-4">Nenhum pão encontrado com os filtros aplicados.</p>
+  <% } %>
+
+  <div class="text-center mt-4">
+    <a href="/listall" class="btn btn-outline-secondary">Listar Todos</a>
+  </div>
+
+</body>
+
+<%- include('partials/footer') %>

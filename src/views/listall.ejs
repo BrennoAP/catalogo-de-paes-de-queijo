@@ -1,0 +1,86 @@
+<%- include('partials/header', { title: 'Lista de Pães' }) %>
+
+<body class="container py-4">
+
+  <div class="text-center mb-4">
+    <h1>Catálogo de Pães</h1>
+    <p>Selecione filtros ou navegue pelas páginas abaixo</p>
+  </div>
+
+  <!-- Formulário de filtros -->
+  <form method="GET" action="/listall" class="row g-3 mb-4">
+    <div class="col-md-3">
+      <label class="form-label">Textura</label>
+      <input type="text" class="form-control" name="textura" value="<%= query.textura || '' %>">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Preço mínimo</label>
+      <input type="number" step="0.01" class="form-control" name="minPreco" value="<%= query.minPreco || '' %>">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Preço máximo</label>
+      <input type="number" step="0.01" class="form-control" name="maxPreco" value="<%= query.maxPreco || '' %>">
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Padaria</label>
+      <select name="padariaId" class="form-select">
+        <option value="">Todas</option>
+        <% padarias.forEach(p => { %>
+          <option value="<%= p.id %>" <%= query.padariaId == p.id ? 'selected' : '' %> >
+            <%= p.name %> - <%= p.endereco %>
+          </option>
+        <% }) %>
+      </select>
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+      <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+    </div>
+  </form>
+
+  <!-- Botão listar todos -->
+  <div class="text-center mb-4">
+    <a href="/listall" class="btn btn-secondary">Listar Todos</a>
+  </div>
+
+  <!-- Cards dos pães -->
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <% paes.forEach(pao => { %>
+      <div class="col">
+        <div class="card h-100">
+          <% if (pao.foto) { %>
+            <img src="/uploads/<%= pao.foto %>" class="card-img-top" style="object-fit: cover; height: 200px;" alt="<%= pao.name %>">
+          <% } else { %>
+            <div class="bg-secondary text-white d-flex justify-content-center align-items-center" style="height: 200px;">
+              Sem foto
+            </div>
+          <% } %>
+          <div class="card-body">
+            <h5 class="card-title"><%= pao.name %></h5>
+            <p class="card-text">
+              <strong>Preço:</strong> R$ <%= pao.preco.toFixed(2) %><br>
+              <strong>Textura:</strong> <%= pao.textura %><br>
+              <strong>Padaria:</strong> <%= pao.padaria.name %>
+            </p>
+            <% if (pao.descricao) { %>
+              <p class="card-text"><em><%= pao.descricao %></em></p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+  <!-- Paginação -->
+  <nav aria-label="Paginação" class="mt-4">
+    <ul class="pagination justify-content-center">
+      <% for (let i = 1; i <= totalPages; i++) { %>
+        <li class="page-item <%= i === page ? 'active' : '' %>">
+          <a class="page-link" href="/listall?<%= new URLSearchParams({...query, page: i}).toString() %>"><%= i %></a>
+        </li>
+      <% } %>
+    </ul>
+  </nav>
+
+</body>
+
+<%- include('partials/footer') %>

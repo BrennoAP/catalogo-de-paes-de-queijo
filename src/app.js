@@ -4,6 +4,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import paoRoutes from "./routes/paoRoutes.js";
 import pageRoutes from "./routes/pageRoutes.js"
+import padariaRoutes from "./routes/padariaRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,6 +25,7 @@ app.set("views", path.join(__dirname, "views"));
 //eu achei engraçado o nome "paoRoutes" dai deixei kkk
 app.use("/", paoRoutes);
 app.use("/", pageRoutes)
+app.use("/", padariaRoutes);
 
 
 export default app;
