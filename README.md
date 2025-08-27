@@ -73,6 +73,9 @@ Uma aplicação web criada em **Node.js** para explorar, comparar e catalogar os
    npm install
    ```
 3. Configure o banco de dados no arquivo `.env`.
+   PORT=numero da sua porta;
+   DATABASE_URL="seu DB"
+   ADMIN_PASSWORD="sua senha"
 
 4. Execute as migrações do Prisma:
    ```sh

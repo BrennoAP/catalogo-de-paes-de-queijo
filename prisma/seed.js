@@ -27,7 +27,6 @@ async function main() {
 
   const padariasData = [
     { name: "Padaria Central", endereco: "Rua Principal, 123" },
-    { name: "Pão Doido", endereco: "Av. doida, 456" },
   ];
 
   const padariaRecords = [];
@@ -40,8 +39,6 @@ async function main() {
 
   const paesData = [
     { name: "Pão de queijo", descricao: "Crocrante por fora e macio por dentro", preco: 1.5, textura: "Crocante" },
-    { name: "Pão de Forma", descricao: "Para sanduíches", preco: 3.0, textura: "Macio" },
-    { name: "Pão Integral", descricao: "Mais saudável", preco: 4.0, textura: "Macio" },
   ];
 
   for (const padaria of padariaRecords) {
