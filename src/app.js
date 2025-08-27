@@ -5,6 +5,9 @@ import { fileURLToPath } from "url";
 import paoRoutes from "./routes/paoRoutes.js";
 import pageRoutes from "./routes/pageRoutes.js"
 import padariaRoutes from "./routes/padariaRoutes.js";
+import authRoutes from "./routes/authRoutes.js"
+import session from "express-session";
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -17,6 +20,16 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));//fazer upload da foto
+app.use(session({
+  secret: "pao_segredo_da_padaria", 
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // true só em HTTPS
+}));
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  next();
+});
 
 //fazendo os ajustes pro ejs
 app.set("view engine", "ejs");
@@ -26,6 +39,7 @@ app.set("views", path.join(__dirname, "views"));
 app.use("/", paoRoutes);
 app.use("/", pageRoutes)
 app.use("/", padariaRoutes);
+app.use("/", authRoutes)
 
 
 export default app;

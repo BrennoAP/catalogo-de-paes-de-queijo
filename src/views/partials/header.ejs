@@ -5,17 +5,33 @@
   <title><%= title %></title>
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/icons/bootstrap-icons-1.13.1.css">
   <!-- CSS padrap -->
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <header class="bg-primary text-white p-3 mb-4">
-    <div class="container d-flex justify-content-between align-items-center">
-      <h1 class="h3 m-0">Catálogo de pães</h1>
-      <nav>
-        <a href="/" class="text-white me-3">Home</a>
-        <a href="/sobre" class="text-white">Sobre</a>
-      </nav>
-    </div>
-  </header>
+
+  
+<header class="bg-primary text-white p-3 mb-4">
+  <div class="container d-flex justify-content-between align-items-center">
+    <h1 class="h3 m-0">Catálogo de Pães</h1>
+
+    <!-- Navegação esquerda -->
+    <nav class="d-flex align-items-center">
+      <a href="/" class="text-white me-3">Home</a>
+      <a href="/sobre" class="text-white me-3">Sobre</a>
+      <a href="/contato" class="text-white">Contato</a>
+    </nav>
+
+    <!-- Botão logout à direita -->
+    <% if (user) { %>
+      <form action="/logout" method="POST" class="m-0">
+        <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+      </form>
+    <% } else { %>
+      <a href="/login" class="btn btn-outline-light btn-sm">Login</a>
+    <% } %>
+  </div>
+</header>
+
   <main class="container">

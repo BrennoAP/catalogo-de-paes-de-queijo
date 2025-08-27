@@ -1,71 +1,70 @@
-//criei um seed simples, sem usar faker e tal
-
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Seeding database...");
+  
+  await prisma.pao.deleteMany({});
+  await prisma.padaria.deleteMany({});
+  await prisma.user.deleteMany({});
+  console.log("Deletados os dados antigos");
 
-  //deleta os trem antes de popular
-  await prisma.pao.deleteMany();
-  await prisma.padaria.deleteMany();
-  await prisma.user.deleteMany();
-
-  //padarias
-  const padaria1 = await prisma.padaria.create({
-    data: { name: "Padaria do morro", endereco: "Rua peculiar, 123" },
+  const adminPassword = process.env.ADMIN_PASSWORD
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
+  await prisma.user.create({
+    data: {
+      name: "Administrador",
+      email: "admin@pao.com",
+      password: hashedPassword,
+      role: "admin",
+    },
   });
+  console.log("Usuário admin criado");
 
-  const padaria2 = await prisma.padaria.create({
-    data: { name: "Padaria do centro", endereco: "Av. central, 456" },
-  });
 
-  //pães
-  await prisma.pao.createMany({
-    data: [
-      {
-        name: "Pão de Queijo",
-        preco: 5.5,
-        textura: "macio",
-        padariaId: padaria1.id,
-      },
-      {
-        name: "Pão de Sal",
-        preco: 4.0,
-        textura: "crocante",
-        padariaId: padaria1.id,
-      },
-      {
-        name: "Pão de Queijo",
-        preco: 6.0,
-        textura: "macio",
-        padariaId: padaria2.id,
-      },
-      {
-        name: "Pão de sal",
-        preco: 2.5,
-        textura: "duro",
-        padariaId: padaria2.id,
-      },
-    ],
-  });
+  //em produção apenas o user admin vai ser inserido atraves de seed
 
-  //usuário de teste
-  //   await prisma.user.create({
-  //     data: { name: "Admin", email: "admin@padaria.com", password: "123456" },
-  //   });
+  const padariasData = [
+    { name: "Padaria Central", endereco: "Rua Principal, 123" },
+    { name: "Pão Doido", endereco: "Av. doida, 456" },
+  ];
 
-  console.log("Seeding finalziado!");
+  const padariaRecords = [];
+  for (const p of padariasData) {
+    const padaria = await prisma.padaria.create({ data: p });
+    padariaRecords.push(padaria);
+  }
+  console.log("Padarias criadas");
+
+
+  const paesData = [
+    { name: "Pão de queijo", descricao: "Crocrante por fora e macio por dentro", preco: 1.5, textura: "Crocante" },
+    { name: "Pão de Forma", descricao: "Para sanduíches", preco: 3.0, textura: "Macio" },
+    { name: "Pão Integral", descricao: "Mais saudável", preco: 4.0, textura: "Macio" },
+  ];
+
+  for (const padaria of padariaRecords) {
+    for (const pao of paesData) {
+      await prisma.pao.create({
+        data: {
+          ...pao,
+          padariaId: padaria.id,
+        },
+      });
+    }
+  }
+
+  console.log("Pães criados");
 }
 
 main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
+  .then(() => {
+    console.log("Seed finalizado!");
+    return prisma.$disconnect();
   })
-  .finally(async () => {
+  .catch(async (e) => {
+    console.error(e);
     await prisma.$disconnect();
+    process.exit(1);
   });
-
-  //executa com node prisma/seed.js ou roda pelo script

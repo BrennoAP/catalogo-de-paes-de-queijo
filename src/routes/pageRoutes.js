@@ -9,7 +9,9 @@ router.get("/sobre", (req, res) => {
 
 //Contato
 router.get("/contato", (req, res) => {
-  res.render("sobre", { title: "Contato - Catálogo de Pães" });
+  res.render("contato", { title: "Contato - Catálogo de Pães" });
 });
+
+
 
 export default router;

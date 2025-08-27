@@ -22,6 +22,7 @@ model Padaria {
   endereco String
   paes     Pao[]
   createdAt DateTime @default(now())
+  deletedAt DateTime?
 }
 
 model Pao {
@@ -34,4 +35,7 @@ model Pao {
   padariaId Int
   padaria   Padaria @relation(fields: [padariaId], references: [id])
   createdAt DateTime @default(now())
+  deletedAt DateTime?
+
+  @@unique([name, padariaId])
 }
