@@ -6,7 +6,8 @@ import paoRoutes from "./routes/paoRoutes.js";
 import pageRoutes from "./routes/pageRoutes.js"
 import padariaRoutes from "./routes/padariaRoutes.js";
 import authRoutes from "./routes/authRoutes.js"
-import session from "express-session";
+import { sessionConfig } from "./config/session.js";
+
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -16,17 +17,15 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, "../public")))
 //pequeno lembrete que o helmet e outros parsers vem ANTES da rota...
+app.use(sessionConfig)
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));//fazer upload da foto
-app.use(session({
-  secret: "pao_segredo_da_padaria", 
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false } // true só em HTTPS
-}));
 app.use((req, res, next) => {
+  if (!req.session) {
+    req.session = {}; // garante que exista
+  }
   res.locals.user = req.session.user || null;
   next();
 });

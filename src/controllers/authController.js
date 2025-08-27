@@ -21,12 +21,15 @@ export const loginUser = async (req, res) => {
     email: user.email,
     role: user.role
     };
-
+req.session.save(err => {
+  if (err) return console.error(err);
   res.redirect("/");
+});
 };
 
 export const logoutUser = (req, res) => {
-  req.session.destroy(() => {
+  req.session.destroy(err => {
+    if (err) console.error("Erro ao destruir sessão:", err);
     res.redirect("/");
   });
 };
