@@ -11,7 +11,7 @@
 
     <!-- Filtros -->
     <form method="GET" action="/" class="row g-3 mb-4 justify-content-center">
-      <div class="col-md-3">
+      <div class="col-md-3 ">
         <label for="padariaId" class="form-label">Padaria</label>
         <select name="padariaId" id="padariaId" class="form-select">
           <option value="">Todas</option>
@@ -23,7 +23,7 @@
         </select>
       </div>
 
-      <div class="col-md-3">
+      <div class="col-md-3 ">
         <label for="textura" class="form-label">Textura</label>
         <select name="textura" id="textura" class="form-select">
           <option value="">Todas</option>
@@ -35,19 +35,19 @@
         </select>
       </div>
 
-      <div class="col-md-2">
+      <div class="col-md-2 ">
         <label for="precoMin" class="form-label">Preço Mínimo</label>
         <input type="number" step="0.01" name="precoMin" id="precoMin" class="form-control"
           value="<%= filtrosAtivos.precoMin || '' %>">
       </div>
 
-      <div class="col-md-2">
+      <div class="col-md-2 col-12">
         <label for="precoMax" class="form-label">Preço Máximo</label>
         <input type="number" step="0.01" name="precoMax" id="precoMax" class="form-control"
           value="<%= filtrosAtivos.precoMax || '' %>">
       </div>
 
-      <div class="col-md-2 d-flex align-items-end">
+      <div class="col-md-2 col-12 d-flex align-items-end">
         <button type="submit" class="btn btn-primary w-100">Aplicar Filtros</button>
       </div>
     </form>
